@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="sistema_de_calificaciones.MainPage"
+             Title="Sistema de Calificaciones"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#E0F2FE">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <!-- TARJETAS BLANCAS CON BORDE CELESTE -->
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#FFFFFF" />
+                <Setter Property="Stroke" Value="#BAE6FD" />
+                <Setter Property="StrokeThickness" Value="1.5" />
+                <Setter Property="Padding" Value="18,12" />
+                <Setter Property="StrokeShape">
+                    <Setter.Value>
+                        <RoundRectangle CornerRadius="14" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Shadow">
+                    <Setter.Value>
+                        <Shadow Brush="#0284C7" Opacity="0.08" Radius="10" Offset="0,4" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- CAMPOS DE ENTRADA -->
+            <Style x:Key="FieldBorder" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#F8FAFC" />
+                <Setter Property="Stroke" Value="#38BDF8" />
+                <Setter Property="StrokeThickness" Value="1.5" />
+                <Setter Property="Padding" Value="10,0" />
+                <Setter Property="HeightRequest" Value="42" />
+                <Setter Property="StrokeShape">
+                    <Setter.Value>
+                        <RoundRectangle CornerRadius="8" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="Entry">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="TextColor" Value="#0369A1" />
+                <Setter Property="PlaceholderColor" Value="#94A3B8" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Keyboard" Value="Numeric" />
+            </Style>
+
+            <Style TargetType="DatePicker">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="TextColor" Value="#0369A1" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+            <!-- CHIPS -->
+            <Style x:Key="WeightChip" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#E0F2FE" />
+                <Setter Property="StrokeThickness" Value="0" />
+                <Setter Property="Padding" Value="8,3" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="StrokeShape">
+                    <Setter.Value>
+                        <RoundRectangle CornerRadius="6" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="WeightText" TargetType="Label">
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#0284C7" />
+            </Style>
+
+            <Style x:Key="FieldLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#0369A1" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*" Padding="18" RowSpacing="14">
+
+        <!-- ENCABEZADO -->
+        <Border x:Name="header" Grid.Row="0" BackgroundColor="#FFFFFF" Stroke="#38BDF8" StrokeThickness="1.5" Padding="16,10">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="14" />
+            </Border.StrokeShape>
+            <Border.Shadow>
+                <Shadow Brush="#0284C7" Opacity="0.1" Radius="8" Offset="0,3" />
+            </Border.Shadow>
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
+                    <Label Text="🎓" FontSize="20" VerticalOptions="Center" />
+                    <Label Text="INSTITUTO SUDAMERICANO" TextColor="#0284C7" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+                <Label Grid.Column="1" Text="Sistema de Calificaciones" TextColor="#0F172A" FontSize="16" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" />
+                <Label Grid.Column="2" Text="Simulador 2026" TextColor="#64748B" FontSize="12" FontAttributes="Bold" VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <!-- DASHBOARD 2 COLUMNAS -->
+        <Grid Grid.Row="1" ColumnDefinitions="1.2*, 1*" ColumnSpacing="14">
+
+            <!-- COLUMNA IZQUIERDA: FORMULARIO DISTRIBUIDO -->
+            <Grid Grid.Column="0" RowDefinitions="*, *, *" RowSpacing="12">
+
+                <!-- DATOS GENERALES -->
+                <Border Grid.Row="0" x:Name="cardEstudiante" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="8" VerticalOptions="Center">
+                        <Label Text="DATOS DEL ESTUDIANTE" TextColor="#0284C7" FontAttributes="Bold" FontSize="13" />
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="ESTUDIANTE" Style="{StaticResource FieldLabel}" />
+                                <Border Style="{StaticResource FieldBorder}">
+                                    <Grid>
+                                        <!-- Texto visible garantizado -->
+                                        <Label x:Name="lblEstudianteSeleccionado" 
+                                               Text="Seleccionar alumno..." 
+                                               TextColor="#94A3B8" 
+                                               FontSize="14" 
+                                               FontAttributes="Bold"
+                                               VerticalOptions="Center" 
+                                               InputTransparent="True" />
+
+                                        <!-- Selector interactivo -->
+                                        <Picker x:Name="pickerEstudiantes" 
+                                                Title="" 
+                                                BackgroundColor="Transparent"
+                                                TextColor="Transparent"
+                                                TitleColor="Transparent"
+                                                SelectedIndexChanged="OnEstudianteSelected" 
+                                                Focused="OnCampoFocused" 
+                                                Unfocused="OnCampoUnfocused">
+                                            <Picker.ItemsSource>
+                                                <x:Array Type="{x:Type x:String}">
+                                                    <x:String>Juan Pérez</x:String>
+                                                    <x:String>María López</x:String>
+                                                    <x:String>Carlos Gómez</x:String>
+                                                    <x:String>Ana Martínez</x:String>
+                                                    <x:String>Luis Rodríguez</x:String>
+                                                </x:Array>
+                                            </Picker.ItemsSource>
+                                        </Picker>
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="FECHA DE REGISTRO" Style="{StaticResource FieldLabel}" />
+                                <Border Style="{StaticResource FieldBorder}">
+                                    <DatePicker x:Name="dpFecha" Format="dd/MM/yyyy" Focused="OnCampoFocused" Unfocused="OnCampoUnfocused" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- PARCIAL 1 -->
+                <Border Grid.Row="1" x:Name="cardParcial1" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="8" VerticalOptions="Center">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <Label Text="PARCIAL 1 (50%)" TextColor="#0284C7" FontAttributes="Bold" FontSize="13" />
+                            <HorizontalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Subtotal: " TextColor="#64748B" FontSize="12" />
+                                <Label x:Name="lblParcial1" Text="0.00" TextColor="#0284C7" FontAttributes="Bold" FontSize="13" />
+                            </HorizontalStackLayout>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="SEGUIMIENTO 1 (30%)" Style="{StaticResource FieldLabel}" />
+                                <Border Style="{StaticResource FieldBorder}">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <Entry x:Name="txtSeguimiento1" Placeholder="Nota 0.1 - 10" Focused="OnCampoFocused" Unfocused="OnCampoUnfocused" TextChanged="OnNotaChanged" />
+                                        <Border Grid.Column="1" Style="{StaticResource WeightChip}">
+                                            <Label Text="30%" Style="{StaticResource WeightText}" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="EXAMEN 1 (20%)" Style="{StaticResource FieldLabel}" />
+                                <Border Style="{StaticResource FieldBorder}">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <Entry x:Name="txtExamen1" Placeholder="Nota 0.1 - 10" Focused="OnCampoFocused" Unfocused="OnCampoUnfocused" TextChanged="OnNotaChanged" />
+                                        <Border Grid.Column="1" Style="{StaticResource WeightChip}">
+                                            <Label Text="20%" Style="{StaticResource WeightText}" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- PARCIAL 2 -->
+                <Border Grid.Row="2" x:Name="cardParcial2" Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="8" VerticalOptions="Center">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <Label Text="PARCIAL 2 (50%)" TextColor="#0284C7" FontAttributes="Bold" FontSize="13" />
+                            <HorizontalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Subtotal: " TextColor="#64748B" FontSize="12" />
+                                <Label x:Name="lblParcial2" Text="0.00" TextColor="#0284C7" FontAttributes="Bold" FontSize="13" />
+                            </HorizontalStackLayout>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="SEGUIMIENTO 2 (30%)" Style="{StaticResource FieldLabel}" />
+                                <Border Style="{StaticResource FieldBorder}">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <Entry x:Name="txtSeguimiento2" Placeholder="Nota 0.1 - 10" Focused="OnCampoFocused" Unfocused="OnCampoUnfocused" TextChanged="OnNotaChanged" />
+                                        <Border Grid.Column="1" Style="{StaticResource WeightChip}">
+                                            <Label Text="30%" Style="{StaticResource WeightText}" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="EXAMEN 2 (20%)" Style="{StaticResource FieldLabel}" />
+                                <Border Style="{StaticResource FieldBorder}">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <Entry x:Name="txtExamen2" Placeholder="Nota 0.1 - 10" Focused="OnCampoFocused" Unfocused="OnCampoUnfocused" TextChanged="OnNotaChanged" />
+                                        <Border Grid.Column="1" Style="{StaticResource WeightChip}">
+                                            <Label Text="20%" Style="{StaticResource WeightText}" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <!-- COLUMNA DERECHA: RESULTADO -->
+            <Border Grid.Column="1" x:Name="cardResultado" BackgroundColor="#FFFFFF" Stroke="#38BDF8" StrokeThickness="1.5" Padding="20">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="16" />
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow Brush="#0284C7" Opacity="0.12" Radius="12" Offset="0,5" />
+                </Border.Shadow>
+
+                <Grid RowDefinitions="Auto,*,Auto,Auto,Auto" RowSpacing="12">
+
+                    <!-- TITULO RESULTADO -->
+                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                        <Label Text="RESUMEN Y NOTA FINAL" TextColor="#0284C7" FontAttributes="Bold" FontSize="13" CharacterSpacing="1" />
+                        <Border x:Name="badgeEstado" Grid.Column="1" BackgroundColor="#64748B" StrokeThickness="0" Padding="10,4">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8" />
+                            </Border.StrokeShape>
+                            <Label x:Name="lblEstado" Text="PENDIENTE" TextColor="White" FontAttributes="Bold" FontSize="10" />
+                        </Border>
+                    </Grid>
+
+                    <!-- NOTA FINAL GRANDE -->
+                    <VerticalStackLayout Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" Spacing="0">
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
+                            <Label x:Name="lblNotaFinal" Text="0.00" TextColor="#0369A1" FontSize="64" FontAttributes="Bold" />
+                            <Label Text="/10" TextColor="#94A3B8" FontSize="20" VerticalOptions="End" Margin="0,0,0,12" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <!-- BARRA DE ESCALA -->
+                    <VerticalStackLayout Grid.Row="2" VerticalOptions="Center" Spacing="8">
+                        <Grid x:Name="barraGrid" HeightRequest="18">
+                            <Grid ColumnDefinitions="5*,2*,3*" ColumnSpacing="3" VerticalOptions="Center">
+                                <BoxView Grid.Column="0" HeightRequest="8" CornerRadius="4" Color="#EF4444" Opacity="0.85" />
+                                <BoxView Grid.Column="1" HeightRequest="8" CornerRadius="4" Color="#F59E0B" Opacity="0.85" />
+                                <BoxView Grid.Column="2" HeightRequest="8" CornerRadius="4" Color="#10B981" Opacity="0.85" />
+                            </Grid>
+                            <Border x:Name="marcador" WidthRequest="18" HeightRequest="18" BackgroundColor="#0284C7" Stroke="White" StrokeThickness="3" HorizontalOptions="Start" VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="9" />
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="Black" Opacity="0.2" Radius="4" Offset="0,2" />
+                                </Border.Shadow>
+                            </Border>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="5*,2*,3*">
+                            <Label Grid.Column="0" Text="&lt; 5.0&#10;Reprobado" TextColor="#64748B" FontSize="10" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <Label Grid.Column="1" Text="5.0 - 6.9&#10;Compl." TextColor="#64748B" FontSize="10" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <Label Grid.Column="2" Text="≥ 7.0&#10;Aprobado" TextColor="#64748B" FontSize="10" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- BOTONES -->
+                    <VerticalStackLayout Grid.Row="3" Spacing="8">
+                        <Button x:Name="btnCalcular" Text="CALCULAR Y GUARDAR" Clicked="OnCalcularClicked" TextColor="White" FontAttributes="Bold" FontSize="14" CornerRadius="10" HeightRequest="46" BackgroundColor="#0284C7" />
+                        <Button x:Name="btnLimpiar" Text="Limpiar Campos" Clicked="OnLimpiarClicked" BackgroundColor="Transparent" FontSize="13" CornerRadius="10" HeightRequest="40" BorderWidth="1.5" TextColor="#0284C7" BorderColor="#0284C7" />
+                    </VerticalStackLayout>
+
+                    <!-- FOOTER -->
+                    <Label Grid.Row="4" x:Name="lblFooter" Text="Desarrollo Móvil · Instituto Sudamericano" FontSize="10" HorizontalTextAlignment="Center" TextColor="#94A3B8" />
+
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Grid>
+</ContentPage>
